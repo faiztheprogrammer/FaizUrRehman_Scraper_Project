@@ -1,0 +1,20 @@
+# Python
+venv/
+*.pyc
+__pycache__/
+backend/venv/
+Scraper/venv/
+
+# Environment variables
+.env
+backend/.env
+
+# Node.js
+frontend/node_modules/
+frontend/dist/
+frontend/.DS_Store
+
+# IDE / OS specific
+.vscode/
+.idea/
+*.DS_Store
