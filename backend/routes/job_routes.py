@@ -36,8 +36,7 @@ def handle_jobs():
             # Sort by the 'posting_date' column in ascending order
             query = query.order_by(Job.posting_date.asc())
         else: 
-            # Default to newest first
-            # Sort by the 'posting_date' column in descending order
+            # Sort by the 'posting_date' column in descending order(default)
             query = query.order_by(Job.posting_date.desc())
 
         jobs = query.all()
