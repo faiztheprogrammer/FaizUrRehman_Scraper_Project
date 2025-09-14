@@ -31,11 +31,14 @@ def handle_jobs():
             tag_conditions = [Job.tags.ilike(f"%{tag}%") for tag in tags_to_filter]
             if tag_conditions: query = query.filter(and_(*tag_conditions))
         
-        sort_by = request.args.get("sort")
-        if sort_by == "oldest":
-            query = query.order_by(Job.id.asc())
-        else:
-            query = query.order_by(Job.id.desc())
+        sort_by = request.args.get('sort')
+        if sort_by == 'oldest':
+            # Sort by the 'posting_date' column in ascending order
+            query = query.order_by(Job.posting_date.asc())
+        else: 
+            # Default to newest first
+            # Sort by the 'posting_date' column in descending order
+            query = query.order_by(Job.posting_date.desc())
 
         jobs = query.all()
         return jsonify([job.to_dict() for job in jobs]), 200
