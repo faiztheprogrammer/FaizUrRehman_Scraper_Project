@@ -2,8 +2,22 @@
 
 ActuarialAxis is a complete full-stack web application designed to list, manage, and filter actuarial job postings. It features a modern, responsive frontend built with React, a robust RESTful API powered by Flask, and a dynamic web scraper using Selenium to populate the job board with real-time data from Actuary List.
 
-**Video UrL(Google Drive):**https://drive.google.com/file/d/1K3I9xkwS4ufSMIERcgiZNpICAuHGnetT/view?usp=sharing
----
+**Video UrL(Google Drive):** https://drive.google.com/file/d/1K3I9xkwS4ufSMIERcgiZNpICAuHGnetT/view?usp=sharing
+
+
+
+## Deployment & Hosting
+
+-   **Frontend:** Hosted on Vercel
+-   **Backend API:** Hosted on Railway
+-   **Database:** MySQL (provisioned on Railway)
+
+**Live Links**
+
+-   **Frontend (React):** https://actuarial-axis-by-faiz-ur-rehman.vercel.app/
+-   **Backend API (Flask):** https://web-production-61339.up.railway.app/api/jobs
+
+
 
 ## Features
 
@@ -28,6 +42,12 @@ ActuarialAxis is a complete full-stack web application designed to list, manage,
 ## Getting Started
 
 Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
+
+## Workflow for Updating Jobs
+
+-   Ensure your backend API is running (locally or deployed).
+-   Run the scraper (python scrape.py)
+-   Frontend automatically reflects new jobs (since it fetches from the backend API).
 
 ### Prerequisites
 

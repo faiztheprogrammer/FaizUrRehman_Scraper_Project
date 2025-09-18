@@ -11,7 +11,7 @@ import time
 # --- Configuration ---
 CHROME_DRIVER_PATH = "./chromedriver.exe"
 TARGET_URL = "https://www.actuarylist.com/"
-API_ENDPOINT = "http://127.0.0.1:5000/api/jobs"
+API_ENDPOINT = 'https://actuarial-axis-backend.vercel.app/api/jobs'
 MAX_PAGES_TO_SCRAPE = 2
 SCRAPER_SOURCE_ID = "actuarylist.com"
 
@@ -102,52 +102,19 @@ def scrape_latest_jobs():
 
 def synchronize_database(latest_jobs):
     print("\n--- Starting Database Synchronization ---")
-    try:
-        response = requests.get(API_ENDPOINT, timeout=10)
-        response.raise_for_status()
-        db_jobs_all = response.json()
-
-        db_jobs_scraped = [
-            j for j in db_jobs_all if j.get("source") == SCRAPER_SOURCE_ID
-        ]
-
-        latest_jobs_set = {
-            (j["title"].lower(), j["company"].lower()) for j in latest_jobs
-        }
-        db_jobs_scraped_set = {
-            (j["title"].lower(), j["company"].lower()): j["id"] for j in db_jobs_scraped
-        }
-
-        # DELETE jobs that are in our DB (as scraped) but NOT in the new list
-        jobs_to_delete_ids = [
-            db_id
-            for identifier, db_id in db_jobs_scraped_set.items()
-            if identifier not in latest_jobs_set
-        ]
-        print(f"Found {len(jobs_to_delete_ids)} old scraped jobs to delete.")
-        if jobs_to_delete_ids:
-            for job_id in jobs_to_delete_ids:
-                requests.delete(f"{API_ENDPOINT}/{job_id}")
-
-        # ADD jobs that are in the new list but NOT in our DB at all
-        db_jobs_all_set = {
-            (j["title"].lower(), j["company"].lower()) for j in db_jobs_all
-        }
-        jobs_to_add = [
-            j
-            for j in latest_jobs
-            if (j["title"].lower(), j["company"].lower()) not in db_jobs_all_set
-        ]
-        print(f"Found {len(jobs_to_add)} new jobs to add.")
-        if jobs_to_add:
-            for job_data in jobs_to_add:
-                requests.post(API_ENDPOINT, json=job_data)
-
-        print("Synchronization complete.")
-
-    except requests.exceptions.RequestException as e:
-        print(f"CRITICAL ERROR during synchronization: {e}")
-
+try:
+    print("GET ->", API_ENDPOINT)
+    resp = requests.get(API_ENDPOINT, timeout=10)
+    print("Status:", resp.status_code)
+    resp.raise_for_status()
+    db_jobs_all = resp.json()
+    ...
+except requests.exceptions.HTTPError as he:
+    print("HTTPError:", he)
+    if he.response is not None:
+        print("Response text:", he.response.status_code, he.response.text[:1000])
+except requests.exceptions.RequestException as e:
+    print("RequestException:", e)
 
 if __name__ == "__main__":
     latest_jobs_list = scrape_latest_jobs()
